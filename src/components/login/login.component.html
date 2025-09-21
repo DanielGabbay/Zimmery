@@ -1,0 +1,52 @@
+
+<div class="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-800">
+  <div class="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md dark:bg-gray-900">
+    <div class="text-center">
+      <h2 class="text-3xl font-extrabold text-gray-900 dark:text-white">כניסת מנהל</h2>
+      <p class="mt-2 text-gray-600 dark:text-gray-400">ניהול הזמנות הצימר שלך</p>
+    </div>
+    <form class="mt-8 space-y-6" (ngSubmit)="onLogin()">
+      <div class="rounded-md shadow-sm -space-y-px">
+        <div>
+          <label for="username" class="sr-only">כתובת אימייל</label>
+          <input id="username" name="username" type="email" required
+                 class="relative block w-full px-3 py-2 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-none appearance-none rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400 dark:border-gray-600"
+                 placeholder="כתובת אימייל"
+                 [ngModel]="username()"
+                 (ngModelChange)="username.set($event)">
+        </div>
+        <div>
+          <label for="password" class="sr-only">סיסמה</label>
+          <input id="password" name="password" type="password" required
+                 class="relative block w-full px-3 py-2 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-none appearance-none rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400 dark:border-gray-600"
+                 placeholder="סיסמה"
+                 [ngModel]="password()"
+                 (ngModelChange)="password.set($event)">
+        </div>
+      </div>
+      
+      @if (errorMessage()) {
+        <div class="p-3 text-sm text-red-700 bg-red-100 rounded-md dark:text-red-300 dark:bg-red-900/50">
+          {{ errorMessage() }}
+        </div>
+      }
+
+      <div class="flex items-center justify-between">
+        <div class="text-sm">
+          <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300">שכחת סיסמה?</a>
+        </div>
+      </div>
+
+      <div>
+        <button type="submit" class="relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md group hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+          כניסה
+        </button>
+      </div>
+    </form>
+    <div class="text-center">
+        <button (click)="useDemoCredentials()" class="text-sm font-medium text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200">
+          השתמש בפרטי הדגמה (admin@example.com/password)
+        </button>
+    </div>
+  </div>
+</div>

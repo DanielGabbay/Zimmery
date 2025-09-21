@@ -1,0 +1,31 @@
+{
+  "name": "zimmery-booking-manager",
+  "version": "1.0.0",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "node ./set-env.js && ng build --configuration production",
+    "watch": "ng build --watch --configuration development"
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/common": "^20.1.6",
+    "@angular/compiler": "^20.1.6",
+    "@angular/core": "^20.1.6",
+    "@angular/forms": "^20.1.6",
+    "@angular/platform-browser": "^20.1.6",
+    "@angular/router": "^20.1.6",
+    "@supabase/supabase-js": "^2.44.4",
+    "jspdf": "^2.5.1",
+    "rxjs": "~7.8.0",
+    "signature_pad": "^4.2.0"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^18.1.0",
+    "@angular/cli": "^18.1.0",
+    "@angular/compiler-cli": "^20.1.6",
+    "@types/node": "^20.11.20",
+    "dotenv": "^16.4.5",
+    "typescript": "~5.5.3"
+  }
+}

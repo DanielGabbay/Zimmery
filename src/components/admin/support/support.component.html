@@ -1,0 +1,47 @@
+<div class="container mx-auto">
+  <div class="flex items-center justify-between mb-6">
+    <h1 class="text-3xl font-bold text-gray-800 dark:text-gray-100">תמיכה ויומני שגיאות</h1>
+    <div>
+        <button (click)="generateTestError()" class="px-4 py-2 ms-4 font-bold text-white bg-yellow-500 rounded-md hover:bg-yellow-600">
+            צור שגיאת בדיקה
+        </button>
+        <button (click)="clearLogs()" class="px-4 py-2 font-bold text-white bg-red-600 rounded-md hover:bg-red-700">
+            נקה יומנים
+        </button>
+    </div>
+  </div>
+
+  <p class="mb-6 text-gray-600 dark:text-gray-400">
+    כאן מוצגות 10 השגיאות האחרונות שאירעו במערכת. מידע זה נשמר בדפדפן המקומי ויכול לסייע באיתור תקלות.
+  </p>
+
+  <div class="overflow-hidden bg-white rounded-lg shadow dark:bg-gray-800">
+    <ul role="list" class="divide-y divide-gray-200 dark:divide-gray-700">
+      @for (error of errors(); track $index) {
+        <li class="px-4 py-5 sm:px-6">
+          <div class="flex items-center justify-between">
+            <p class="text-sm font-medium text-indigo-600 truncate dark:text-indigo-400">{{ error.message }}</p>
+            <div class="flex-shrink-0 ms-2">
+              <p class="inline-flex px-2 text-xs font-semibold leading-5 text-gray-800 bg-gray-100 rounded-full dark:text-gray-300 dark:bg-gray-700">
+                {{ error.timestamp | date:'dd/MM/yy HH:mm:ss':'':'he' }}
+              </p>
+            </div>
+          </div>
+          @if (error.stack) {
+            <div class="mt-4">
+              <pre class="p-3 text-xs text-gray-600 bg-gray-50 rounded-md whitespace-pre-wrap font-mono dark:text-gray-400 dark:bg-gray-900">{{ error.stack }}</pre>
+            </div>
+          }
+        </li>
+      } @empty {
+        <li class="px-4 py-12 text-center sm:px-6">
+          <svg class="w-12 h-12 mx-auto text-gray-400 dark:text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">לא נמצאו שגיאות</h3>
+          <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">יומן השגיאות נקי.</p>
+        </li>
+      }
+    </ul>
+  </div>
+</div>
