@@ -1,10 +1,7 @@
+
 <div class="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
   <div class="w-full max-w-3xl mx-auto my-10">
-    @if (booking() === undefined) {
-      <div class="p-8 text-center bg-white rounded-lg shadow-md dark:bg-gray-800">
-        <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100">טוען פרטי הזמנה...</h2>
-      </div>
-    } @else if (!booking()) {
+    @if (!booking()) {
       <div class="p-8 text-center bg-white rounded-lg shadow-md dark:bg-gray-800">
         <h2 class="text-2xl font-bold text-red-600 dark:text-red-400">הזמנה לא נמצאה</h2>
         <p class="mt-4 text-gray-600 dark:text-gray-400">קישור זה אינו תקין או שההזמנה בוטלה. אנא פנה לבעל הצימר.</p>
@@ -13,7 +10,7 @@
       @if (!isAuthenticated()) {
         <div class="p-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
           <h2 class="text-2xl font-bold text-center text-gray-800 dark:text-gray-100">אימות זהות</h2>
-          <p class="mt-2 text-center text-gray-600 dark:text-gray-400">לאישור וצפייה בפרטי ההזמנה, אנא הזן את מספר תעודת הזהות שלך.</p>
+          <div class="mt-2 text-center text-gray-600 dark:text-gray-400">{{ welcomeMessage() }}</div>
           <div class="max-w-sm mx-auto mt-6">
             <input type="text" [(ngModel)]="idNumberInput" placeholder="מספר תעודת זהות" class="block w-full px-4 py-2 text-center border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
             @if (errorMessage()) {
@@ -27,15 +24,15 @@
           <!-- Header -->
           <div class="p-6 border-b border-gray-200 dark:border-gray-700">
             <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100">אישור הזמנה וחתימה על הסכם</h1>
-            <p class="mt-1 text-gray-600 dark:text-gray-400">שלום {{ booking()?.customer.fullName }}, אנא עיין בפרטים וחתום לאישור.</p>
+            <p class="mt-1 text-gray-600 dark:text-gray-400">שלום {{ booking()?.customer?.fullName }}, אנא עיין בפרטים וחתום לאישור.</p>
           </div>
 
           <!-- Booking Summary -->
           <div class="p-6">
             <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-100">סיכום ההזמנה</h2>
             <div class="grid grid-cols-2 gap-4 mt-4 text-sm text-gray-700 dark:text-gray-300">
-              <div><strong>תאריך הגעה:</strong> {{ booking()?.checkInDate | date:'fullDate':'':'he' }}</div>
-              <div><strong>תאריך עזיבה:</strong> {{ booking()?.checkOutDate | date:'fullDate':'':'he' }}</div>
+              <div><strong>תאריך הגעה:</strong> {{ booking()?.checkInDate | date:'fullDate' }}</div>
+              <div><strong>תאריך עזיבה:</strong> {{ booking()?.checkOutDate | date:'fullDate' }}</div>
               <div><strong>מבוגרים:</strong> {{ booking()?.adults }}</div>
               <div><strong>ילדים:</strong> {{ booking()?.children }}</div>
               <div class="col-span-2 p-3 mt-2 text-lg font-bold text-indigo-800 bg-indigo-100 rounded-md dark:text-indigo-200 dark:bg-indigo-900/50">
@@ -49,8 +46,15 @@
 
           <!-- Agreement Text -->
           <div class="p-6 border-t border-gray-200 dark:border-gray-700">
-            <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-100">הסכם אירוח</h2>
+            <div class="text-xl font-semibold text-gray-800 dark:text-gray-100">{{ pdfHeaderText() }}</div>
             <div class="h-48 p-3 mt-4 overflow-y-auto bg-gray-100 border border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600">
+              @if (agreementTerms().length > 0) {
+                <ol class="text-sm text-gray-600 dark:text-gray-400 space-y-2">
+                  @for (term of agreementTerms(); track $index) {
+                    <li>{{ term }}</li>
+                  }
+                </ol>
+              } @else {
                 <p class="text-sm text-gray-600 dark:text-gray-400">
                     ברוכים הבאים! אנו שמחים לארח אתכם.
                     <br><br>
@@ -62,6 +66,7 @@
                     <br>
                     <strong>4. שעות:</strong> כניסה החל מהשעה 15:00, יציאה עד השעה 11:00.
                 </p>
+              }
             </div>
           </div>
           
@@ -79,7 +84,7 @@
             <div class="mt-6">
               <label class="flex items-center">
                 <input type="checkbox" class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500" [(ngModel)]="termsAccepted">
-                <span class="ms-2 text-gray-700 dark:text-gray-300">קראתי ואני מאשר/ת את תנאי ההסכם.</span>
+                <span class="ml-2 mr-2 text-gray-700 dark:text-gray-300">קראתי ואני מאשר/ת את תנאי ההסכם.</span>
               </label>
             </div>
 

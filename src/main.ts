@@ -1,11 +1,16 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { provideRouter, withHashLocation } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
-import { ErrorHandler, provideZonelessChangeDetection } from '@angular/core';
+import { ErrorHandler, provideZonelessChangeDetection, LOCALE_ID } from '@angular/core';
+import { registerLocaleData } from '@angular/common';
+import localeHe from '@angular/common/locales/he';
 
 import { AppComponent } from './app.component';
 import { APP_ROUTES } from './app.routes';
 import { ErrorLoggingService } from './services/error-logging.service';
+
+// Register Hebrew locale
+registerLocaleData(localeHe, 'he');
 
 class GlobalErrorHandler implements ErrorHandler {
   constructor(private errorLoggingService: ErrorLoggingService) {}
@@ -26,6 +31,10 @@ bootstrapApplication(AppComponent, {
       provide: ErrorHandler,
       useFactory: (errorLoggingService: ErrorLoggingService) => new GlobalErrorHandler(errorLoggingService),
       deps: [ErrorLoggingService]
+    },
+    {
+      provide: LOCALE_ID,
+      useValue: 'he'
     }
   ],
 }).catch((err) => console.error(err));

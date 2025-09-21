@@ -1,0 +1,6 @@
+onlyBuiltDependencies:
+  - core-js
+  - esbuild
+  - lmdb
+  - msgpackr-extract
+  - nice-napi

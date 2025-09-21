@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>הסכם אירוח - {{customerName}}</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Heebo', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #ffffff;
+            padding: 40px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            border-bottom: 3px solid #2c5282;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2c5282;
+            margin-bottom: 10px;
+        }
+        
+        .header .date {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .booking-details {
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+        
+        .booking-details h2 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #4299e1;
+            padding-bottom: 8px;
+        }
+        
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+        
+        .detail-label {
+            font-weight: 500;
+            color: #4a5568;
+            min-width: 120px;
+        }
+        
+        .detail-value {
+            font-weight: 600;
+            color: #2d3748;
+            text-align: left;
+        }
+        
+        .agreement-section {
+            margin: 40px 0;
+        }
+        
+        .agreement-section h2 {
+            font-size: 22px;
+            font-weight: 600;
+            color: #2c5282;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .terms-list {
+            list-style: none;
+            counter-reset: term-counter;
+        }
+        
+        .terms-list li {
+            counter-increment: term-counter;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        .terms-list li::before {
+            content: counter(term-counter);
+            position: absolute;
+            top: -8px;
+            right: 15px;
+            background: #4299e1;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .signature-section {
+            margin: 50px 0;
+            text-align: center;
+        }
+        
+        .signature-section h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 20px;
+        }
+        
+        .signature-box {
+            border: 2px solid #4299e1;
+            border-radius: 8px;
+            height: 120px;
+            margin: 20px auto;
+            width: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f8fafc;
+            position: relative;
+        }
+        
+        .signature-placeholder {
+            color: #a0aec0;
+            font-style: italic;
+        }
+        
+        .signature-image {
+            max-width: 280px;
+            max-height: 100px;
+            object-fit: contain;
+        }
+        
+        .footer {
+            margin-top: 50px;
+            text-align: center;
+            font-size: 12px;
+            color: #718096;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 20px;
+        }
+        
+        @media print {
+            body {
+                padding: 20px;
+            }
+            
+            .signature-box {
+                border: 2px solid #000;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>הסכם אירוח</h1>
+        <div class="date">{{currentDate}}</div>
+    </div>
+
+    <div class="booking-details">
+        <h2>פרטי ההזמנה</h2>
+        <div class="detail-row">
+            <span class="detail-label">מספר הזמנה:</span>
+            <span class="detail-value">{{bookingId}}</span>
+        </div>
+        <div class="detail-row">
+            <span class="detail-label">שם הלקוח:</span>
+            <span class="detail-value">{{customerName}}</span>
+        </div>
+        <div class="detail-row">
+            <span class="detail-label">תעודת זהות:</span>
+            <span class="detail-value">{{customerId}}</span>
+        </div>
+        <div class="detail-row">
+            <span class="detail-label">טלפון:</span>
+            <span class="detail-value">{{customerPhone}}</span>
+        </div>
+        <div class="detail-row">
+            <span class="detail-label">תאריכי האירוח:</span>
+            <span class="detail-value">{{checkinDate}} - {{checkoutDate}}</span>
+        </div>
+    </div>
+
+    <div class="agreement-section">
+        <h2>תנאי ההסכם</h2>
+        <ol class="terms-list">
+            <li>האירוח הינו אישי ואינו ניתן להעברה לצד שלישי ללא אישור מוקדם בכתב מהמארח.</li>
+            <li>ביטול ההזמנה יתקבל עד 14 יום לפני מועד תחילת האירוח. ביטול מאוחר יותר יחויב בתשלום מלא.</li>
+            <li>על האורח לשמור על השקט והניקיון במתחם האירוח ולכבד את שאר האורחים והשכנים.</li>
+            <li>האורח מתחייב לשלם את התמורה המלאה עבור האירוח במועד שנקבע בהזמנה.</li>
+            <li>כל נזק שיגרם למתחם האירוח או לציוד שבו על ידי האורח יחויב בתשלום נוסף לפי העלות בפועל.</li>
+            <li>האורח מצהיר כי קיבל הסבר מלא על תנאי השימוש במתחם ומתחייב לפעול על פיהם.</li>
+            <li>המארח שומר לעצמו את הזכות לסיים את האירוח מיידית במקרה של הפרת התנאים.</li>
+        </ol>
+    </div>
+
+    <div class="signature-section">
+        <h3>חתימת האורח</h3>
+        <div class="signature-box">
+            {{#if signatureImage}}
+                <img src="{{signatureImage}}" alt="חתימת האורח" class="signature-image">
+            {{else}}
+                <div class="signature-placeholder">מקום לחתימה</div>
+            {{/if}}
+        </div>
+        <p style="margin-top: 15px; color: #4a5568;">
+            אני הח"ם מאשר/ת כי קראתי והבנתי את תנאי ההסכם לעיל ואני מסכים/ה לכל האמור בו.
+        </p>
+    </div>
+
+    <div class="footer">
+        <p>מסמך זה הופק אוטומטית על ידי מערכת ניהול ההזמנות</p>
+        <p>{{websiteUrl}} | עמוד {{pageNumber}} מתוך {{totalPages}}</p>
+    </div>
+</body>
+</html>

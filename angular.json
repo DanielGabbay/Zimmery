@@ -17,7 +17,9 @@
             "index": "src/index.html",
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
-            "assets": [],
+            "assets": [
+              "src/assets"
+            ],
             "styles": [],
             "scripts": []
           },
@@ -31,8 +33,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "4kb",
+                  "maximumError": "6kb"
                 }
               ],
               "outputHashing": "all"
@@ -59,5 +61,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }

@@ -30,6 +30,10 @@ export const APP_ROUTES: Routes = [
         loadComponent: () => import('./components/admin/new-booking/new-booking.component').then(m => m.NewBookingComponent)
       },
       { 
+        path: 'content-management',
+        loadComponent: () => import('./components/admin/content-management/content-management.component').then(m => m.ContentManagementComponent)
+      },
+      { 
         path: 'support',
         loadComponent: () => import('./components/admin/support/support.component').then(m => m.SupportComponent)
       },

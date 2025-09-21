@@ -1,0 +1,10 @@
+node_modules
+.env
+.angular
+dist
+.idea
+WARP.md
+database-setup.sql
+database-setup-fixed.sql
+check-db.js
+test-db.js

@@ -81,23 +81,35 @@ export class BookingService {
   // without an 'id' property, which is correct for new bookings where the customer might not exist yet.
   async addBooking(bookingData: Omit<Booking, 'id' | 'status' | 'createdAt' | 'customer'> & { customer: Omit<Customer, 'id'> }): Promise<Booking | null> {
     if (!this.supabase) return null;
-    const { data: customerData, error: customerError } = await this.supabase
-        .from('customers')
-        .upsert({
-            full_name: bookingData.customer.fullName,
-            id_number: bookingData.customer.idNumber,
-            phone_number: bookingData.customer.phoneNumber,
-            email: bookingData.customer.email
-        }, { onConflict: 'id_number', ignoreDuplicates: false })
-        .select('id')
-        .single();
+    
+    // First, try to find existing customer
+    const existingCustomer = await this.findCustomer(bookingData.customer.idNumber, bookingData.customer.phoneNumber);
+    
+    let customerId: string;
+    
+    if (existingCustomer) {
+      // Customer exists, use their ID
+      customerId = existingCustomer.id!;
+    } else {
+      // Customer doesn't exist, create new one
+      const { data: customerData, error: customerError } = await this.supabase
+          .from('customers')
+          .insert({
+              full_name: bookingData.customer.fullName,
+              id_number: bookingData.customer.idNumber,
+              phone_number: bookingData.customer.phoneNumber,
+              email: bookingData.customer.email
+          })
+          .select('id')
+          .single();
 
-    if (customerError) {
-        console.error('Error upserting customer:', customerError);
-        return null;
+      if (customerError) {
+          console.error('Error creating customer:', customerError);
+          return null;
+      }
+      customerId = customerData!.id;
     }
 
-    const customerId = customerData!.id;
 
     const newBookingData = {
         customer_id: customerId,
@@ -136,20 +148,21 @@ export class BookingService {
           .from('customers')
           .select('*')
           .or(`id_number.eq.${idNumber},phone_number.eq.${phoneNumber}`)
-          .limit(1)
-          .single();
+          .limit(1);
 
-      if (error && error.code !== 'PGRST116') { // PGRST116 means no rows found
+      if (error) {
           console.error('Error finding customer', error);
+          return null;
       }
       
-      if (data) {
+      if (data && data.length > 0) {
+        const customer = data[0];
         return {
-          id: data.id,
-          fullName: data.full_name,
-          idNumber: data.id_number,
-          phoneNumber: data.phone_number,
-          email: data.email,
+          id: customer.id,
+          fullName: customer.full_name,
+          idNumber: customer.id_number,
+          phoneNumber: customer.phone_number,
+          email: customer.email,
         };
       }
       return null;

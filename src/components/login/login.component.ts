@@ -1,14 +1,14 @@
 
 
 import { Component, ChangeDetectionStrategy, signal, inject } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
   // Fix: standalone: true is the default in Angular v20+ and should be removed.
-  imports: [FormsModule, RouterLink],
+  imports: [FormsModule],
   templateUrl: './login.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -21,4 +21,8 @@ export class SupabaseService {
         console.error("Supabase URL and Key are not set in the environment file.");
     }
   }
+
+  getClient(): SupabaseClient | null {
+    return this.supabase;
+  }
 }

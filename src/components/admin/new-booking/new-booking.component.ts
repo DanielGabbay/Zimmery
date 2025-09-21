@@ -16,7 +16,7 @@ import { Booking, Customer } from '../../../models/booking.model';
 })
 export class NewBookingComponent {
   private bookingService = inject(BookingService);
-  private router = inject(Router);
+  router = inject(Router);
 
   model: any = {
     customer: {},

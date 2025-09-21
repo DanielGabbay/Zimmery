@@ -1,0 +1,334 @@
+<div class="content-management-container">
+  <!-- Header -->
+  <div class="header-section">
+    <h2 class="page-title">ניהול תוכן</h2>
+    <button 
+      class="btn btn-primary" 
+      (click)="showCreate()"
+      [disabled]="isLoading()">
+      <span class="icon">+</span>
+      הוסף תבנית חדשה
+    </button>
+  </div>
+
+  <!-- Messages -->
+  <div class="messages">
+    @if (successMessage()) {
+      <div class="alert alert-success">{{ successMessage() }}</div>
+    }
+    @if (errorMessage()) {
+      <div class="alert alert-error">{{ errorMessage() }}</div>
+    }
+  </div>
+
+  <!-- Create Form -->
+  @if (showCreateForm()) {
+    <div class="form-section">
+      <div class="form-header">
+        <h3>הוספת תבנית חדשה</h3>
+        <button class="btn btn-secondary" (click)="cancelEdit()">ביטול</button>
+      </div>
+      
+      <form (ngSubmit)="createTemplate()" class="template-form">
+        <div class="form-group">
+          <label for="new-type">סוג תבנית:</label>
+          <select 
+            id="new-type"
+            [value]="newTemplate().template_type"
+            (change)="onNewTemplateTypeChange($event)"
+            class="form-control">
+            @for (option of templateTypeOptions; track option.value) {
+              <option [value]="option.value">{{ option.label }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="new-title">כותרת:</label>
+          <input 
+            type="text" 
+            id="new-title"
+            [value]="newTemplate().title"
+            (input)="onNewTemplateTitleInput($event)"
+            class="form-control" 
+            placeholder="הזן כותרת..."
+            required>
+        </div>
+
+        <div class="form-group">
+          <label for="new-content-type">סוג תוכן:</label>
+          <select 
+            id="new-content-type"
+            [value]="newTemplate().content_type"
+            (change)="onNewTemplateContentTypeChange($event)"
+            class="form-control">
+            @for (option of contentTypeOptions; track option.value) {
+              <option [value]="option.value">{{ option.label }}</option>
+            }
+          </select>
+        </div>
+
+        @if (newTemplate().content_type === 'text') {
+          <div class="form-group">
+            <label for="new-content">תוכן:</label>
+            <textarea 
+              id="new-content"
+              [value]="newTemplate().content"
+              (input)="onNewTemplateContentInput($event)"
+              class="form-control content-textarea" 
+              placeholder="הזן תוכן..."
+              rows="6"
+              required></textarea>
+            <div class="form-hint">
+              עבור תנאי הסכם, השתמש בפורמט JSON: ["תנאי 1", "תנאי 2", ...]
+            </div>
+          </div>
+        }
+
+        @if (newTemplate().content_type === 'html_url') {
+          <div class="form-group">
+            <label for="new-html-url">קישור לקובץ HTML:</label>
+            <input 
+              type="url" 
+              id="new-html-url"
+              [value]="newTemplate().html_url"
+              (input)="onNewTemplateHtmlUrlInput($event)"
+              class="form-control" 
+              placeholder="https://example.com/template.html"
+              required>
+            <div class="form-hint">
+              הזן קישור מלא לקובץ HTML חיצוני
+            </div>
+          </div>
+        }
+
+        @if (newTemplate().content_type === 'html_content') {
+          <div class="form-group">
+            <label for="new-html-content">נתיב לקובץ HTML מקומי:</label>
+            <input 
+              type="text" 
+              id="new-html-content"
+              [value]="newTemplate().html_content"
+              (input)="onNewTemplateHtmlContentInput($event)"
+              class="form-control" 
+              placeholder="assets/templates/my-template.html"
+              required>
+            <div class="form-hint">
+              הזן נתיב יחסי לקובץ HTML בתיקיית assets
+            </div>
+          </div>
+        }
+
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input 
+              type="checkbox"
+              [checked]="newTemplate().is_active"
+              (change)="onNewTemplateActiveChange($event)" />
+            <span class="checkmark"></span>
+            תבנית פעילה
+          </label>
+        </div>
+
+        <div class="form-actions">
+          <button 
+            type="submit" 
+            class="btn btn-primary"
+            [disabled]="isLoading()">
+            @if (isLoading()) {
+              <span class="spinner"></span>
+            }
+            צור תבנית
+          </button>
+          <button type="button" class="btn btn-secondary" (click)="cancelEdit()">ביטול</button>
+        </div>
+      </form>
+    </div>
+  }
+
+  <!-- Edit Form -->
+  @if (editingTemplate()) {
+    <div class="form-section">
+      <div class="form-header">
+        <h3>עריכת תבנית: {{ editingTemplate()?.title }}</h3>
+        <button class="btn btn-secondary" (click)="cancelEdit()">ביטול</button>
+      </div>
+      
+      <form (ngSubmit)="updateTemplate()" class="template-form">
+        <div class="form-group">
+          <label>סוג תבנית:</label>
+          <div class="readonly-field">{{ getTemplateTypeLabel(editingTemplate()!.template_type) }}</div>
+        </div>
+
+        <div class="form-group">
+          <label for="edit-title">כותרת:</label>
+          <input 
+            type="text" 
+            id="edit-title"
+            [value]="editForm().title"
+            (input)="onEditFormTitleInput($event)"
+            class="form-control" 
+            placeholder="הזן כותרת..."
+            required>
+        </div>
+
+        <div class="form-group">
+          <label for="edit-content-type">סוג תוכן:</label>
+          <select 
+            id="edit-content-type"
+            [value]="editForm().content_type"
+            (change)="onEditFormContentTypeChange($event)"
+            class="form-control">
+            @for (option of contentTypeOptions; track option.value) {
+              <option [value]="option.value">{{ option.label }}</option>
+            }
+          </select>
+        </div>
+
+        @if (editForm().content_type === 'text') {
+          <div class="form-group">
+            <label for="edit-content">תוכן:</label>
+            <textarea 
+              id="edit-content"
+              [value]="editForm().content"
+              (input)="onEditFormContentInput($event)"
+              class="form-control content-textarea" 
+              placeholder="הזן תוכן..."
+              rows="6"
+              required></textarea>
+            <div class="form-hint">
+              עבור תנאי הסכם, השתמש בפורמט JSON: ["תנאי 1", "תנאי 2", ...]
+            </div>
+          </div>
+        }
+
+        @if (editForm().content_type === 'html_url') {
+          <div class="form-group">
+            <label for="edit-html-url">קישור לקובץ HTML:</label>
+            <input 
+              type="url" 
+              id="edit-html-url"
+              [value]="editForm().html_url"
+              (input)="onEditFormHtmlUrlInput($event)"
+              class="form-control" 
+              placeholder="https://example.com/template.html"
+              required>
+            <div class="form-hint">
+              הזן קישור מלא לקובץ HTML חיצוני
+            </div>
+          </div>
+        }
+
+        @if (editForm().content_type === 'html_content') {
+          <div class="form-group">
+            <label for="edit-html-content">נתיב לקובץ HTML מקומי:</label>
+            <input 
+              type="text" 
+              id="edit-html-content"
+              [value]="editForm().html_content"
+              (input)="onEditFormHtmlContentInput($event)"
+              class="form-control" 
+              placeholder="assets/templates/my-template.html"
+              required>
+            <div class="form-hint">
+              הזן נתיב יחסי לקובץ HTML בתיקיית assets
+            </div>
+          </div>
+        }
+
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input 
+              type="checkbox"
+              [checked]="editForm().is_active"
+              (change)="onEditFormActiveChange($event)" />
+            <span class="checkmark"></span>
+            תבנית פעילה
+          </label>
+        </div>
+
+        <div class="form-actions">
+          <button 
+            type="submit" 
+            class="btn btn-primary"
+            [disabled]="isLoading()">
+            @if (isLoading()) {
+              <span class="spinner"></span>
+            }
+            עדכן תבנית
+          </button>
+          <button type="button" class="btn btn-secondary" (click)="cancelEdit()">ביטול</button>
+        </div>
+      </form>
+    </div>
+  }
+
+  <!-- Templates List -->
+  <div class="templates-section">
+    <h3>תבניות קיימות</h3>
+    
+    @if (templates().length === 0) {
+      <div class="empty-state">
+        <p>אין תבניות זמינות</p>
+      </div>
+    } @else {
+      <div class="templates-grid">
+        @for (template of templates(); track template.id) {
+          <div class="template-card" [class.inactive]="!template.is_active">
+            <div class="template-header">
+              <h4 class="template-title">{{ template.title }}</h4>
+              <div class="template-meta">
+                <span class="template-type">{{ getTemplateTypeLabel(template.template_type) }}</span>
+                <span class="template-status" [class.active]="template.is_active">
+                  {{ template.is_active ? 'פעיל' : 'לא פעיל' }}
+                </span>
+              </div>
+            </div>
+
+            <div class="template-content">
+              @if (isJsonArray(template.content)) {
+                <div class="json-content">
+                  <strong>רשימה:</strong>
+                  <ul>
+                    @for (item of getFormattedArrayContent(template.content); track $index) {
+                      <li>{{ item }}</li>
+                    }
+                  </ul>
+                </div>
+              } @else {
+                <div class="text-content">{{ getContentPreview(template.content) }}</div>
+              }
+            </div>
+
+            <div class="template-actions">
+              <button 
+                class="btn btn-small btn-primary" 
+                (click)="editTemplate(template)"
+                [disabled]="isLoading()">
+                ערוך
+              </button>
+              <button 
+                class="btn btn-small" 
+                [class.btn-success]="!template.is_active"
+                [class.btn-warning]="template.is_active"
+                (click)="toggleActive(template)"
+                [disabled]="isLoading()">
+                {{ template.is_active ? 'השבת' : 'הפעל' }}
+              </button>
+              <button 
+                class="btn btn-small btn-danger" 
+                (click)="deleteTemplate(template)"
+                [disabled]="isLoading()">
+                מחק
+              </button>
+            </div>
+
+            <div class="template-dates">
+              <small>עודכן: {{ formatDate(template.updated_at) }}</small>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>

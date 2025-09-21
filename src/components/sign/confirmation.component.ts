@@ -4,7 +4,7 @@ import { Component, ChangeDetectionStrategy, inject, signal } from '@angular/cor
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule, DatePipe } from '@angular/common';
 import { BookingService } from '../../services/booking.service';
-import { Booking } from '../../../models/booking.model';
+import { Booking } from '../../models/booking.model';
 
 @Component({
   selector: 'app-confirmation',

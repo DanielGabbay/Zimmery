@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>אישור הזמנה</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Heebo', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #38b2ac 0%, #319795 100%);
+            padding: 30px;
+            margin: 0;
+        }
+        
+        .container {
+            max-width: 650px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+        
+        .success-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .content {
+            padding: 40px 30px;
+        }
+        
+        .success-message {
+            text-align: center;
+            font-size: 18px;
+            color: #2d3748;
+            margin-bottom: 30px;
+            line-height: 1.8;
+        }
+        
+        .booking-summary {
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+        
+        .booking-summary h3 {
+            color: #38a169;
+            font-size: 20px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+        
+        .next-steps {
+            background: #edf2f7;
+            border-radius: 8px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+        
+        .next-steps h3 {
+            color: #2d3748;
+            font-size: 18px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .next-steps p {
+            text-align: center;
+            color: #4a5568;
+            margin-bottom: 10px;
+        }
+        
+        .footer {
+            background: #f7fafc;
+            padding: 20px 30px;
+            text-align: center;
+            color: #718096;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="success-icon">✅</div>
+            <h1>הזמנתך אושרה בהצלחה!</h1>
+            <p>תודה על חתימתך על הסכם האירוח</p>
+        </div>
+        
+        <div class="content">
+            <div class="success-message">
+                שלום <strong>{{customerName}}</strong>,<br><br>
+                חתמת בהצלחה על הסכם האירוח והזמנתך אושרה!<br>
+                פרטי ההזמנה נשלחו אליך במייל ואנחנו מצפים לראותך בקרוב.
+            </div>
+            
+            <div class="booking-summary">
+                <h3>סיכום ההזמנה</h3>
+                <div class="summary-item">
+                    <span><strong>מספר הזמנה:</strong></span>
+                    <span>{{bookingId}}</span>
+                </div>
+                <div class="summary-item">
+                    <span><strong>תאריכי האירוח:</strong></span>
+                    <span>{{checkinDate}} - {{checkoutDate}}</span>
+                </div>
+                <div class="summary-item">
+                    <span><strong>סטטוס:</strong></span>
+                    <span style="color: #38a169; font-weight: bold;">מאושר</span>
+                </div>
+            </div>
+            
+            <div class="next-steps">
+                <h3>השלבים הבאים</h3>
+                <p>📧 תקבל אישור במייל עם כל הפרטים</p>
+                <p>📱 נהיה בקשר לפני מועד ההגעה</p>
+                <p>🏠 ברוכים הבאים למתחם שלנו!</p>
+            </div>
+        </div>
+        
+        <div class="footer">
+            תאריך אישור: {{currentDate}} | מערכת ניהול ההזמנות
+        </div>
+    </div>
+</body>
+</html>
